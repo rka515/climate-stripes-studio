@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101a24">
+  <meta name="description" content="An interactive climate warming stripes studio. Explore the warming signal through time.">
+  <title>Climate Stripes Studio — See the signal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Climate Stripes Studio home">
+      <span class="brand-mark"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>CLIMATE <b>STRIPES</b> <em>STUDIO</em></span>
+    </a>
+    <nav class="topnav">
+      <a href="#explore">Explore</a><a href="#story">The science</a><a href="#about">About</a>
+    </nav>
+    <button class="icon-btn" id="themeToggle" title="Toggle light/dark appearance" aria-label="Toggle appearance">◐</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> A VISUAL JOURNEY THROUGH CLIMATE HISTORY</div>
+        <h1>The planet is<br><span>changing colour.</span></h1>
+        <p class="hero-lede">Every stripe is a year. Every shade tells a story. Explore the warming signal hidden inside more than a century of temperature records.</p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#explore">Explore the stripes <span>↘</span></a>
+          <button class="text-btn" id="playIntro">▶ &nbsp;Play the timeline</button>
+        </div>
+        <div class="hero-foot"><span class="mini-bars"></span><span>1880 — PRESENT</span><span class="foot-divider"></span><span>GLOBAL TEMPERATURE ANOMALY</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="planet"><div class="planet-glow"></div><div class="planet-lines"></div><div class="planet-land"></div></div>
+        <div class="hero-tag tag-top"><span class="tag-dot red"></span> THE WARMING SIGNAL</div>
+        <div class="hero-tag tag-bottom"><span class="tag-value">+1.28°C</span><small>2024 · NASA GISTEMP</small></div>
+        <div class="hero-coord">40°N&nbsp; 20°E<br>EARTH / 01</div>
+      </div>
+    </section>
+
+    <section class="stat-ribbon">
+      <div class="stat-item"><span class="stat-label">RECORD YEAR</span><strong id="recordYear">2024</strong><small>Warmest year in this view</small></div>
+      <div class="stat-item"><span class="stat-label">ANOMALY</span><strong id="recordAnomaly">+1.28<span>°C</span></strong><small>Above 1951–1980 average</small></div>
+      <div class="stat-item"><span class="stat-label">YEARS EXPLORED</span><strong id="yearCount">145</strong><small>Annual observations</small></div>
+      <div class="stat-note"><span class="note-icon">↗</span><p>Climate stripes turn complex data into an immediate visual. The shift from blue to red is the signal.</p></div>
+    </section>
+
+    <section class="explore-section" id="explore">
+      <div class="section-heading">
+        <div><div class="eyebrow">01 / THE BIG PICTURE</div><h2>One stripe. <span>One year.</span></h2></div>
+        <p>Choose a time window, inspect individual years, and watch the pattern emerge.</p>
+      </div>
+      <div class="studio-panel">
+        <div class="panel-top">
+          <div class="panel-title"><span class="pulse"></span> GLOBAL WARMING STRIPES <small id="datasetStatus">LOADING DATA…</small></div>
+          <div class="panel-actions">
+            <button class="subtle-btn" id="downloadPng">↓ PNG</button>
+            <button class="subtle-btn" id="downloadCsv">↓ CSV</button>
+            <button class="subtle-btn" id="shareBtn">↗ SHARE</button>
+          </div>
+        </div>
+        <div class="stripes-wrap">
+          <div class="stripe-labels"><span>WARMER</span><span>AVERAGE</span><span>COOLER</span></div>
+          <div class="stripes-stage">
+            <div id="stripes" class="stripes" role="img" aria-label="Annual global temperature anomaly stripes"></div>
+            <div id="stripeTooltip" class="stripe-tooltip"></div>
+          </div>
+          <div class="stripe-years"><span id="startYear">1880</span><span>TIME →</span><span id="endYear">2024</span></div>
+        </div>
+        <div class="legend-row">
+          <span>COOLER</span><div class="legend-gradient"></div><span>WARMER</span>
+          <span class="legend-caption">Temperature anomaly (°C) · relative to 1951–1980</span>
+        </div>
+        <div class="controls">
+          <div class="control-block range-block">
+            <div class="control-head"><label>TIME WINDOW</label><strong id="rangeLabel">1880 — 2024</strong></div>
+            <div class="range-inputs"><input id="fromRange" type="range" min="1880" max="2024" value="1880"><input id="toRange" type="range" min="1880" max="2024" value="2024"></div>
+            <div class="range-presets"><button data-range="all" class="active">All years</button><button data-range="50">Last 50</button><button data-range="30">Last 30</button><button data-range="10">Last 10</button></div>
+          </div>
+          <div class="control-block">
+            <div class="control-head"><label>COLOUR SCALE</label><strong id="scaleLabel">Balanced</strong></div>
+            <select id="scaleSelect"><option value="balanced">Balanced</option><option value="dramatic">High contrast</option><option value="soft">Soft tones</option></select>
+            <p class="control-hint">Change the visual intensity without changing the data.</p>
+          </div>
+          <div class="control-block">
+            <div class="control-head"><label>VIEW MODE</label><strong id="viewLabel">Stripes</strong></div>
+            <div class="segmented"><button class="selected" data-view="stripes">Stripes</button><button data-view="bars">Bars</button></div>
+            <p class="control-hint">Switch between the classic stripes and a year-by-year bar view.</p>
+          </div>
+        </div>
+      </div>
+      <div class="insight-row">
+        <div class="insight-mark">✳</div>
+        <div><b id="insightTitle">The pattern is unmistakable.</b><p id="insightText">Cooler years dominate the earlier record. In recent decades, warmer-than-average years become more frequent and more intense.</p></div>
+        <button class="text-btn" id="randomYear">Surprise me ↗</button>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <div class="section-heading compact">
+        <div><div class="eyebrow">02 / ZOOM INTO THE DATA</div><h2>A closer <span>look.</span></h2></div>
+        <p>Pick any year to reveal its temperature anomaly and place it in context.</p>
+      </div>
+      <div class="detail-grid">
+        <div class="year-card">
+          <div class="year-card-top"><span>YEAR INSPECTOR</span><span class="tiny-live">● LIVE DATA</span></div>
+          <div class="year-display"><span id="selectedYear">2024</span><small id="selectedLabel">LATEST IN VIEW</small></div>
+          <div class="anomaly-display"><strong id="selectedAnomaly">+1.28°</strong><span>CELSIUS ANOMALY</span></div>
+          <input id="yearSlider" type="range" min="1880" max="2024" value="2024">
+          <div class="year-nav"><button id="prevYear">← Previous</button><button id="nextYear">Next year →</button></div>
+          <div class="year-context" id="yearContext">This year was warmer than the 1951–1980 reference average.</div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-head"><div><span class="eyebrow">ANNUAL TEMPERATURE ANOMALY</span><h3>The long-term trajectory</h3></div><span class="chart-unit">°C</span></div>
+          <div id="lineChart" class="line-chart"></div>
+          <div class="chart-foot"><span>1880</span><span>1950</span><span>2000</span><span id="chartEnd">2024</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="compare-section" id="story">
+      <div class="section-heading">
+        <div><div class="eyebrow">03 / THEN & NOW</div><h2>See the shift. <span>Feel the difference.</span></h2></div>
+        <p>Compare two periods side by side. The colours make the change hard to miss.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-period">
+          <div class="compare-head"><span>EARLIER PERIOD</span><strong id="earlyYears">1880–1909</strong></div>
+          <div class="compare-stripes" id="earlyStripes"></div>
+          <div class="compare-number"><strong id="earlyMean">−0.18°C</strong><span>AVERAGE ANOMALY</span></div>
+        </div>
+        <div class="compare-center"><span>VS</span><div class="compare-arrow">→</div><small>THE WARMING GAP</small><strong id="warmingGap">+1.1°C</strong></div>
+        <div class="compare-period">
+          <div class="compare-head"><span>RECENT PERIOD</span><strong id="recentYears">1995–2024</strong></div>
+          <div class="compare-stripes" id="recentStripes"></div>
+          <div class="compare-number"><strong id="recentMean">+0.90°C</strong><span>AVERAGE ANOMALY</span></div>
+        </div>
+      </div>
+      <div class="compare-controls"><label for="compareSelect">Compare recent years against</label><select id="compareSelect"><option value="1880">1880–1909</option><option value="1910">1910–1939</option><option value="1940">1940–1969</option><option value="1970">1970–1999</option></select><span class="compare-note">Each period uses a 30-year average where data is available.</span></div>
+    </section>
+
+    <section class="story-section" id="about">
+      <div class="story-left"><div class="eyebrow">04 / READ THE STRIPES</div><h2>Not just<br><span>pretty colours.</span></h2><p>Warming stripes are a simple way to show how temperatures have changed over time. Each vertical stripe represents one year. Blue means cooler than the reference average; red means warmer.</p><a class="source-link" href="https://showyourstripes.info/" target="_blank" rel="noreferrer">Discover the original Warming Stripes project ↗</a></div>
+      <div class="story-steps">
+        <div class="story-step"><span>01</span><div><b>Start with the baseline</b><p>Temperature anomalies compare each year with a long-term reference period—not with an absolute temperature.</p></div></div>
+        <div class="story-step"><span>02</span><div><b>Read from left to right</b><p>Time moves forward. The colour shift reveals how the climate signal changes across generations.</p></div></div>
+        <div class="story-step"><span>03</span><div><b>Look beyond one year</b><p>Individual years vary naturally. Long-term patterns are the clearest way to understand climate change.</p></div></div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="closing-lines"></div><div class="eyebrow">THE FUTURE IS STILL BEING WRITTEN</div><h2>Make the signal<br><span>impossible to ignore.</span></h2><p>Understand the past. Explore the present. Shape what comes next.</p><a href="#explore" class="primary-btn">Back to the stripes ↑</a>
+    </section>
+  </main>
+  <footer><a class="brand" href="#"><span class="brand-mark"><i></i><i></i><i></i><i></i><i></i></span><span>CLIMATE <b>STRIPES</b> <em>STUDIO</em></span></a><span>BUILT TO MAKE CLIMATE DATA VISIBLE.</span><span>DATA: NASA GISTEMP v4 · UI EXPERIMENT</span></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
